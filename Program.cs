@@ -33,24 +33,21 @@ namespace ExtensionMethodDependencyInjection
     // Extension methods for Widget that use DI
     public static class WidgetExtensions
     {
-        private static IServiceProvider? _serviceProvider;
+        private static IWidgetService? _widgetService;
 
         public static void Initialize(IServiceProvider serviceProvider)
         {
-            _serviceProvider = serviceProvider;
+            _widgetService = serviceProvider.GetService<IWidgetService>();
+            if (_widgetService == null)
+                throw new InvalidOperationException("No IWidgetService registered.");
         }
 
         // Extension method that uses a DI service
         public static Widget EnhanceWithDI(this Widget widget)
         {
-            if (_serviceProvider == null)
-                throw new InvalidOperationException("Extension methods not initialized with IServiceProvider.");
-
-            var service = _serviceProvider.GetService<IWidgetService>();
-            if (service == null)
-                throw new InvalidOperationException("No IWidgetService registered.");
-
-            return service.Enhance(widget);
+            if (_widgetService == null)
+                throw new InvalidOperationException("WidgetExtensions not initialized with IWidgetService.");
+            return _widgetService.Enhance(widget);
         }
     }
 

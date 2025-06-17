@@ -10,8 +10,10 @@ Extension methods in C# are static, so you can’t inject services directly into
 
 1. **Create your service and interface as usual.**
 2. **Add a static `Initialize(IServiceProvider)` method to your extension class.**
-3. **Store the `IServiceProvider` in a private static field.**
-4. **Use that provider inside your extension methods to resolve services as needed.**
+3. **Use the provider inside the `Initialize(IServiceProvider)` method to resolve your services and store them in private static fields.**
+4. **Use the services as needed.**
+
+> **Note:** This pattern is best for singleton or stateless services. Avoid using it for scoped or transient services, or services that depend on per-request/user state.
 
 ## Example: Enhancing a Widget
 
